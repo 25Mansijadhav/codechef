@@ -1,0 +1,67 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+import java.util.stream.Collectors;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	static Map<Integer, String> cacheLevels = new HashMap<Integer, String>();
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Integer tests = Integer.parseInt(br.readLine());
+		for(int ixTest =1;ixTest<=tests; ixTest++ ){
+		    Integer printRow = Integer.parseInt(br.readLine());
+		    System.out.println(getLevelOfTriangle(printRow));
+		}
+	}
+	
+	public static String getLevelOfTriangle(Integer level) {
+		
+		String returnComplete="";
+		if(cacheLevels.containsKey(level)) {
+			returnComplete= cacheLevels.get(level);
+		}else {
+			List<Long> currentRow = new ArrayList<Long>();
+			StringBuffer sbResult= new StringBuffer();
+			Long newData = 0l;
+			List<Long> lastRow = Arrays.asList(1l,1l);
+			if(level.equals(Integer.valueOf(1))){
+				//System.out.println("1");
+				cacheLevels.put(1,"1");
+				returnComplete = cacheLevels.get(1);
+			}
+			if(level.equals(Integer.valueOf(2))){
+				//System.out.println("1 1");
+				cacheLevels.put(2,"1 1");
+				returnComplete = cacheLevels.get(2);
+			}
+		   	for(Integer ix=3;ix<=level;ix++) {
+				sbResult.append("1 ");
+        currentRow.add(Long.valueOf(1));
+				for(int iy=1;iy<lastRow.size();iy++) {
+					newData = lastRow.get(iy-1)+lastRow.get(iy);
+					sbResult.append(newData+" ");
+					currentRow.add(newData);
+				}
+				sbResult.append("1 ");
+				cacheLevels.put(ix,sbResult.toString());
+				if(level.equals(ix)) {
+					returnComplete = sbResult.toString();
+				}
+
+				sbResult.delete(0, sbResult.length());
+				currentRow.add(Long.valueOf(1));
+				lastRow = currentRow.stream().collect(Collectors.toList());
+				currentRow.clear();
+			}
+		}
+		return returnComplete;
+
+	}
+}
+
+	
